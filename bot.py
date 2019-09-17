@@ -1,7 +1,7 @@
 import telebot
 import time
-#import prueba
-#import aemet
+import prueba
+import aemet
 import canciones
 import os, stat
 import datetime
@@ -49,12 +49,10 @@ def command_ayuda(m):  # Definimos una función que resuleva lo que necesitemos.
 
 	cid = m.chat.id  # Guardamos el ID de la conversación para poder responder.
 
-	bot.send_chat_action(cid, 'typing')  # Enviando ...
-
-	time.sleep(1)  # La respuesta del bot tarda 1 segundo en ejecutarse
+	
 
 	# Con la función 'send_message()' del bot, enviamos al ID almacenado el texto que queremos.
-	bot.send_message(cid, "AYUDA")
+	bot.send_message(cid, "Los comandos son los siguientes:\n1º /spotify <URL>\n2º /aemet <ciudad de España>\n3º /tiempo <cualquier ciudad>")
 
 
 # Comando para la prediccion del tiempo
@@ -158,34 +156,38 @@ def command_spotify(s):
 	playlist = s.text.split('/spotify', 1)[1].strip()
 	if "https://open.spotify.com/" in playlist:
 		
-		modTimesinceEpoc = os.path.getmtime("/Users/alejandrosanzperez/Desktop/Uni/Bot/pruebaSpoti/testfile.txt")
-		modificationTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(modTimesinceEpoc))
- 
-		añoMod = modificationTime[0:modificationTime.find("-")]
-		newMT = modificationTime[modificationTime.find("-")+1:len(modificationTime)]
-		mesMod = newMT[0:newMT.find("-")]
-		newMT = newMT[newMT.find("-")+1:len(newMT)]
-		diaMod = newMT[0:newMT.find(" ")]  
+		#modTimesinceEpoc = os.path.getmtime("/Users/alejandrosanzperez/Desktop/Uni/Bot/pruebaSpoti/testfile.txt")
+		#modificationTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(modTimesinceEpoc))
+ #
+		#añoMod = modificationTime[0:modificationTime.find("-")]
+		#newMT = modificationTime[modificationTime.find("-")+1:len(modificationTime)]
+		#mesMod = newMT[0:newMT.find("-")]
+		#newMT = newMT[newMT.find("-")+1:len(newMT)]
+		#diaMod = newMT[0:newMT.find(" ")]  
+#
+		#now = datetime.datetime.now()
+		#currentyear = (str)(now.year)
+		#currentmonth = (str)(now.month)
+		#currentday = (str)(now.day)
+#
+		#if(currentday != diaMod | currentmonth != mesMod | currentyear != añoMod):
+		#	file = open("testfile.txt","w") 
+		#	file.write("0")
+		#	file.close()
 
-		now = datetime.datetime.now()
-		currentyear = (str)(now.year)
-		currentmonth = (str)(now.month)
-		currentday = (str)(now.day)
-
-		if(currentday != diaMod | currentmonth != mesMod | currentyear != añoMod):
-			file = open("testfile.txt","w") 
-			file.write("0")
-			file.close()
-
-		file = open("testfile.txt","r") 
-		numero = file.read()
+		#file = open("testfile.txt","r") 
+		#numero = file.read()
+		numero = 50
 		if numero < 110:
 			tracks = []
 			tracks = canciones.tracks(playlist)
 			for k in tracks:
-				audio = open(k, "rb")
-				print(k)
-				bot.send_audio(cid, audio)
+				size = os.stat(k).st_size
+				size = int(size/1000000)
+				if(size<20):
+					audio = open(k, "rb")
+					print(k)
+					bot.send_audio(cid, audio)
 				remove(k)
 		else:
 			bot.send_message(cid, "La cuota diaria ha sido excedida, por favor espere hasta mañana para poder descargar más música")

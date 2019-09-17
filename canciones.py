@@ -5,6 +5,7 @@ import shutil
 import re
 import youtube_dl
 import urllib
+from pathlib import Path
 from pyquery import PyQuery as Pq
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
@@ -16,7 +17,7 @@ from oauth2client.tools import argparser
 # tab of
 #   https://cloud.google.com/console
 # Please ensure that you have enabled the YouTube Data API for your project.
-DEVELOPER_KEY = "AIzaSyCq3lYFjVH_-pNpMvOx6t5u0YvZKWdUyvU"
+DEVELOPER_KEY = "AIzaSyCwtFyURinXYSXUuMw9yEA02_yKPI_aTWA"
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
 
@@ -36,12 +37,12 @@ def tracks(playlist):
 	songs = []
 	for cancion in cosas['tracks']['items']:
 		s = cancion['track']['name']
-		encontrada = cache(s)
-		if encontrada is 0:
-			autores = ''
-			for autor in cancion['track']['artists']:
-				autores = autores + ' {}'.format(autor['name'])
-			songs.append('{} {}'.format(autores, s))
+		#encontrada = cache(s)
+		#if encontrada is 0:
+		autores = ''
+		for autor in cancion['track']['artists']:
+			autores = autores + ' {}'.format(autor['name'])
+		songs.append('{} {}'.format(autores, s))
 	urls = []
 	for s in songs:
 		print(s)
@@ -53,14 +54,21 @@ def tracks(playlist):
 			print(e)
 	#leer el valor, coger el que te ha dado y sumarselo 
 	songsDownload = len(urls)
-	file = open("testfile.txt","r") 
-	numero =int(file.read())
-	file.close()
-	numero = numero + songsDownload
-	numero = str(numero)
-	file = open("testfile.txt","w")
-	file.write(numero)
-	file.close()
+	file = Path("testfile.txt")
+	if file.is_file():
+		file = open("testfile.txt","r")
+		numero =int(file.read())
+		file.close()
+		numero = numero + songsDownload
+		numero = str(numero)
+		file = open("testfile.txt","w")
+		file.write(numero)
+		file.close()
+	else:
+		file = open("testfile.txt","w")
+		numero = str(songsDownload)
+		file.write(numero)
+		file.close
 
 	try:
 		bajarCancion(urls)
@@ -75,7 +83,7 @@ def tracks(playlist):
 	path = os.path.abspath("mp3")
 	tracks = []
 	for fi in os.listdir("mp3"):
-		tracks.append(path + "\\" + os.path.basename(fi))
+		tracks.append(path + "/" + os.path.basename(fi))
 	return tracks
 
 def bajarCancion(url):
@@ -155,4 +163,4 @@ def cache(cancion):
 	return 0
 
 
-print(tracks("https://open.spotify.com/user/spotify/playlist/37i9dQZF1DWXCGnD7W6WDX?si=FAC-IX9RTAiRHns93rD6XA"))
+#print(tracks("https://open.spotify.com/playlist/1RiYN89CUBVdY93cVqW9r7?si=9151ixNwQtu8PfZobsSguw"))
