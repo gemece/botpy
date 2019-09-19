@@ -178,9 +178,10 @@ def command_spotify(s):
 		#file = open("testfile.txt","r") 
 		#numero = file.read()
 		numero = 50
-		if numero < 110:
+		if numero <= 110:
+			Dev_key="AIzaSyCq3lYFjVH_-pNpMvOx6t5u0YvZKWdUyvU"
 			tracks = []
-			tracks = canciones.tracks(playlist)
+			tracks = canciones.tracks(playlist, Dev_Key)
 			for k in tracks:
 				size = os.stat(k).st_size
 				size = int(size/1000000)
@@ -189,6 +190,19 @@ def command_spotify(s):
 					print(k)
 					bot.send_audio(cid, audio)
 				remove(k)
+		if numero > 110 & numero <= 220:
+			Dev_key="AIzaSyCwtFyURinXYSXUuMw9yEA02_yKPI_aTWA"
+			tracks = []
+			tracks = canciones.tracks(playlist, Dev_Key)
+			for k in tracks:
+				size = os.stat(k).st_size
+				size = int(size/1000000)
+				if(size<20):
+					audio = open(k, "rb")
+					print(k)
+					bot.send_audio(cid, audio)
+				remove(k)
+
 		else:
 			bot.send_message(cid, "La cuota diaria ha sido excedida, por favor espere hasta mañana para poder descargar más música")
 	else:

@@ -17,14 +17,12 @@ from oauth2client.tools import argparser
 # tab of
 #   https://cloud.google.com/console
 # Please ensure that you have enabled the YouTube Data API for your project.
-DEVELOPER_KEY = "AIzaSyCwtFyURinXYSXUuMw9yEA02_yKPI_aTWA"
+#DEVELOPER_KEY = ""
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
 
 
-#Cambios: Que siempre meta el autor en la busqueda (linea 43), comprobacion de la playlist introducida (linea 26)
-
-def tracks(playlist):
+def tracks(playlist,DevKey):
 	if "user" in playlist:
 		playlist = playlist[0:playlist.find("user")] +""+ playlist[playlist.find("playlist"):len(playlist)]
 	r = requests.get(playlist)
@@ -47,7 +45,7 @@ def tracks(playlist):
 	for s in songs:
 		print(s)
 		try:
-			url = api_youtube_search(s)
+			url = api_youtube_search(s, DevKey)
 			if url is not None:
 				urls.append(url)
 		except Exception as e:
@@ -125,7 +123,8 @@ def search_youtube_video(title, pages):
 	indice = lista_views.index(max(lista_views))
 	return lista_url[indice]
 
-def api_youtube_search(options):
+def api_youtube_search(options, DevKey):
+	DEVELOPER_KEY = DevKey
 	youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
                  developerKey=DEVELOPER_KEY)
 
@@ -163,4 +162,4 @@ def cache(cancion):
 	return 0
 
 
-#print(tracks("https://open.spotify.com/playlist/1RiYN89CUBVdY93cVqW9r7?si=9151ixNwQtu8PfZobsSguw"))
+tracks("https://open.spotify.com/playlist/1RiYN89CUBVdY93cVqW9r7?si=9151ixNwQtu8PfZobsSguw","AIzaSyCwtFyURinXYSXUuMw9yEA02_yKPI_aTWA")
