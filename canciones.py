@@ -21,26 +21,7 @@ from oauth2client.tools import argparser
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
 
-
 def tracks(playlist,DevKey):
-	if "user" in playlist:
-		playlist = playlist[0:playlist.find("user")] +""+ playlist[playlist.find("playlist"):len(playlist)]
-	r = requests.get(playlist)
-	r.encoding = 'utf-8'
-	f = open("kk.txt", "w")
-	f.write(r.text)
-	f.close()
-	jeje = r.text.split('Spotify.Entity = ')[1].split(';')[0]
-	cosas = json.loads(jeje)
-	songs = []
-	for cancion in cosas['tracks']['items']:
-		s = cancion['track']['name']
-		#encontrada = cache(s)
-		#if encontrada is 0:
-		autores = ''
-		for autor in cancion['track']['artists']:
-			autores = autores + ' {}'.format(autor['name'])
-		songs.append('{} {}'.format(autores, s))
 	urls = []
 	for s in songs:
 		print(s)
@@ -160,6 +141,41 @@ def cache(cancion):
 				return 1
 
 	return 0
+
+
+def envio_borrado(tracks):
+			for k in tracks:
+				size = os.stat(k).st_size
+				size = int(size/1000000)
+				if(size<20):
+					audio = open(k, "rb")
+					print(k)
+					bot.send_audio(cid, audio)
+				remove(k)
+
+
+def numero_canciones(playlist):
+	if "user" in playlist:
+		playlist = playlist[0:playlist.find("user")] +""+ playlist[playlist.find("playlist"):len(playlist)]
+	r = requests.get(playlist)
+	r.encoding = 'utf-8'
+	f = open("kk.txt", "w")
+	f.write(r.text)
+	f.close()
+	jeje = r.text.split('Spotify.Entity = ')[1].split(';')[0]
+	cosas = json.loads(jeje)
+	songs = []
+	for cancion in cosas['tracks']['items']:
+		s = cancion['track']['name']
+		#encontrada = cache(s)
+		#if encontrada is 0:
+		autores = ''
+		for autor in cancion['track']['artists']:
+			autores = autores + ' {}'.format(autor['name'])
+		songs.append('{} {}'.format(autores, s))
+	length = len(songs)
+	
+	return length,songs
 
 
 tracks("https://open.spotify.com/playlist/1RiYN89CUBVdY93cVqW9r7?si=9151ixNwQtu8PfZobsSguw","AIzaSyCwtFyURinXYSXUuMw9yEA02_yKPI_aTWA")

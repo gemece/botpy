@@ -3,7 +3,8 @@ import time
 import prueba
 import aemet
 import canciones
-import os, stat
+import os
+import stat
 import datetime
 from os import remove
 TOKEN = "801717901:AAE7f2lehXmP19B0EklfSnclw3DfAs5e8iY"
@@ -14,29 +15,29 @@ bot = telebot.TeleBot(TOKEN)
 # Con esto, estamos definiendo una función llamada 'listener', que recibe como parámetro un dato llamado 'messages'.
 def listener(messages):
 
-	for m in messages:  # Por cada dato 'm' en el dato 'messages'
+    for m in messages:  # Por cada dato 'm' en el dato 'messages'
 
-		cid = m.chat.id  # El Cid es el identificador del chat los negativos son grupos y positivos los usuarios
+        cid = m.chat.id  # El Cid es el identificador del chat los negativos son grupos y positivos los usuarios
 
-		if cid > 0:
+        if cid > 0:
 
-			# Si 'cid' es positivo, usaremos 'm.chat.first_name' para el nombre.
-			mensaje = str(m.chat.first_name) + " [" + str(cid) + "]: " + m.text
+            # Si 'cid' es positivo, usaremos 'm.chat.first_name' para el nombre.
+            mensaje = str(m.chat.first_name) + " [" + str(cid) + "]: " + m.text
 
-		else:
+        else:
 
-			# Si 'cid' es negativo, usaremos 'm.from_user.first_name' para el nombre.
-			mensaje = str(m.from_user.first_name) + \
-				"[" + str(cid) + "]: " + m.text
+            # Si 'cid' es negativo, usaremos 'm.from_user.first_name' para el nombre.
+            mensaje = str(m.from_user.first_name) + \
+                "[" + str(cid) + "]: " + m.text
 
-		# Abrimos nuestro fichero log en modo 'Añadir'.
-		f = open('log.txt', 'a')
+        # Abrimos nuestro fichero log en modo 'Añadir'.
+        f = open('log.txt', 'a')
 
-		f.write(mensaje + "\n")  # Escribimos la linea de log en el fichero.
+        f.write(mensaje + "\n")  # Escribimos la linea de log en el fichero.
 
-		f.close()  # Cerramos el fichero para que se guarde.
+        f.close()  # Cerramos el fichero para que se guarde.
 
-		print(mensaje)
+        print(mensaje)
 
 
 # Así, le decimos al bot que utilice como función escuchadora nuestra función 'listener' declarada arriba.
@@ -47,166 +48,157 @@ bot.set_update_listener(listener)
 @bot.message_handler(commands=['ayuda'])
 def command_ayuda(m):  # Definimos una función que resuleva lo que necesitemos.
 
-	cid = m.chat.id  # Guardamos el ID de la conversación para poder responder.
+    cid = m.chat.id  # Guardamos el ID de la conversación para poder responder.
 
-	
-
-	# Con la función 'send_message()' del bot, enviamos al ID almacenado el texto que queremos.
-	bot.send_message(cid, "Los comandos son los siguientes:\n1º /spotify <URL>\n2º /aemet <ciudad de España>\n3º /tiempo <cualquier ciudad>")
+    # Con la función 'send_message()' del bot, enviamos al ID almacenado el texto que queremos.
+    bot.send_message(
+        cid, "Los comandos son los siguientes:\n1º /spotify <URL>\n2º /aemet <ciudad de España>\n3º /tiempo <cualquier ciudad>")
 
 
 # Comando para la prediccion del tiempo
 @bot.message_handler(commands=['tiempo'])
 def command_tiempo(t):
 
-	cid = t.chat.id
-	ciudad = t.text.split('/tiempo')[1].strip()
+    cid = t.chat.id
+    ciudad = t.text.split('/tiempo')[1].strip()
 
-	if ciudad is not '':
-		resultado = prueba.tiempo(ciudad)
-		if resultado["cod"] != "404":
-			for i in resultado["list"]:
-				# store the value of "main"
-				# key in variable y
-				y = i['main']
-				# store the value corresponding
-				# to the "temp" key of y
-				current_temperature = y["temp"]
-				current_temperature -= 273.15
-				# store the value corresponding
-				# to the "pressure" key of y
-				current_pressure = y["pressure"]
-				# store the value corresponding
-				# to the "humidity" key of y
-				current_humidiy = y["humidity"]
-				temp_min = y["temp_min"]
-				temp_min -= 273.15
-				temp_max = y["temp_max"]
-				temp_max -= 273.15
-				# store the value of "weather"
-				# key in variable z
-				z = i["weather"]
-				# store the value corresponding
-				# to the "description" key at
-				# the 0th index of z
-				weather_description = z[0]["description"]
-				fecha = i["dt_txt"]
-				text = "Fecha y hora: " + str(fecha) + "\n"
-				bot.send_message(cid, text)
-				# print following values
-				text = " Temperature ºC = " + str(round(current_temperature, 2)) + "\n presion atmosférica (hPa) = " + str(current_pressure) + "\n humedad % = " + str(
-					current_humidiy) + "\n descripcion = " + str(weather_description) + "\n temperatura Max = " + str(round(temp_max, 2)) + "\n temperatura Min = " + str(round(temp_min, 2))
-				bot.send_message(cid, text+"\n")
+    if ciudad is not '':
+        resultado = prueba.tiempo(ciudad)
+        if resultado["cod"] != "404":
+            for i in resultado["list"]:
+                # store the value of "main"
+                # key in variable y
+                y = i['main']
+                # store the value corresponding
+                # to the "temp" key of y
+                current_temperature = y["temp"]
+                current_temperature -= 273.15
+                # store the value corresponding
+                # to the "pressure" key of y
+                current_pressure = y["pressure"]
+                # store the value corresponding
+                # to the "humidity" key of y
+                current_humidiy = y["humidity"]
+                temp_min = y["temp_min"]
+                temp_min -= 273.15
+                temp_max = y["temp_max"]
+                temp_max -= 273.15
+                # store the value of "weather"
+                # key in variable z
+                z = i["weather"]
+                # store the value corresponding
+                # to the "description" key at
+                # the 0th index of z
+                weather_description = z[0]["description"]
+                fecha = i["dt_txt"]
+                text = "Fecha y hora: " + str(fecha) + "\n"
+                bot.send_message(cid, text)
+                # print following values
+                text = " Temperature ºC = " + str(round(current_temperature, 2)) + "\n presion atmosférica (hPa) = " + str(current_pressure) + "\n humedad % = " + str(
+                    current_humidiy) + "\n descripcion = " + str(weather_description) + "\n temperatura Max = " + str(round(temp_max, 2)) + "\n temperatura Min = " + str(round(temp_min, 2))
+                bot.send_message(cid, text+"\n")
 
-		else:
-			bot.send_message(cid, " Ciudad no encontrada ")
-	else:
-		bot.send_message(cid, " Ciudad no encontrada ")
+        else:
+            bot.send_message(cid, " Ciudad no encontrada ")
+    else:
+        bot.send_message(cid, " Ciudad no encontrada ")
 
 
 @bot.message_handler(commands=['aemet'])
 def command_aemet(t):
-	cid = t.chat.id
-	ciudad = t.text.split('/aemet')[1].strip()
-	print(ciudad)
-	if ciudad is not '':
-		x = aemet.tiempo(ciudad)
-		if x is not None:
-			for i in x['prediccion']['dia']:
-				fecha = i['fecha']
-				res = "Dia " + fecha
-				probPrecipitacion = i['probPrecipitacion'][0]
-				if(len(probPrecipitacion) > 1):
-					res1 = "{} H ---> Probabilidad de precipitacion {} %".format(
-						probPrecipitacion['periodo'], probPrecipitacion['value'])
-				else:
-					res1 = "00-24 H ---> Probabilidad de precipitacion {} %".format(
-						probPrecipitacion['value'])
+    cid = t.chat.id
+    ciudad = t.text.split('/aemet')[1].strip()
+    print(ciudad)
+    if ciudad is not '':
+        x = aemet.tiempo(ciudad)
+        if x is not None:
+            for i in x['prediccion']['dia']:
+                fecha = i['fecha']
+                res = "Dia " + fecha
+                probPrecipitacion = i['probPrecipitacion'][0]
+                if(len(probPrecipitacion) > 1):
+                    res1 = "{} H ---> Probabilidad de precipitacion {} %".format(
+                        probPrecipitacion['periodo'], probPrecipitacion['value'])
+                else:
+                    res1 = "00-24 H ---> Probabilidad de precipitacion {} %".format(
+                        probPrecipitacion['value'])
 
-				estadoCielo = i['estadoCielo'][0]
-				if(len(estadoCielo) > 2):
-					res2 = "{} ---> {}".format(estadoCielo['periodo'],
-					                           estadoCielo['descripcion'])
-				else:
-					res2 = "00-24 H ---> {}".format(estadoCielo['descripcion'])
+                estadoCielo = i['estadoCielo'][0]
+                if(len(estadoCielo) > 2):
+                    res2 = "{} ---> {}".format(estadoCielo['periodo'],
+                                               estadoCielo['descripcion'])
+                else:
+                    res2 = "00-24 H ---> {}".format(estadoCielo['descripcion'])
 
-				temperatura = i['temperatura']
-				res3 = "Temperatura Maxima {}\nTemperatura Minima {}".format(
-					temperatura['maxima'], temperatura['minima'])
+                temperatura = i['temperatura']
+                res3 = "Temperatura Maxima {}\nTemperatura Minima {}".format(
+                    temperatura['maxima'], temperatura['minima'])
 
-				sensTermica = i['sensTermica']
-				res4 = "Sensacion Termica Maxima {}\nSensacion Termica Minima {}".format(
-					sensTermica['maxima'], sensTermica['minima'])
+                sensTermica = i['sensTermica']
+                res4 = "Sensacion Termica Maxima {}\nSensacion Termica Minima {}".format(
+                    sensTermica['maxima'], sensTermica['minima'])
 
-				humedadRelativa = i['humedadRelativa']
-				res5 = "Humedad Maxima {} %\nHumedad Minima {} %\n".format(
-					humedadRelativa['maxima'], humedadRelativa['minima'])
+                humedadRelativa = i['humedadRelativa']
+                res5 = "Humedad Maxima {} %\nHumedad Minima {} %\n".format(
+                    humedadRelativa['maxima'], humedadRelativa['minima'])
 
-				bot.send_message(cid, res + "\n" + res1 + "\n" + res2 +
-				                 "\n" + res3 + "\n" + res4 + "\n" + res5 + "\n")
-		else:
-			bot.send_message(cid, " Ciudad no encontrada ")
-	else:
-		bot.send_message(cid, " Ciudad no encontrada ")
+                bot.send_message(cid, res + "\n" + res1 + "\n" + res2 +
+                                 "\n" + res3 + "\n" + res4 + "\n" + res5 + "\n")
+        else:
+            bot.send_message(cid, " Ciudad no encontrada ")
+    else:
+        bot.send_message(cid, " Ciudad no encontrada ")
 
 
 @bot.message_handler(commands=['spotify'])
 def command_spotify(s):
-	cid = s.chat.id
-	playlist = s.text.split('/spotify', 1)[1].strip()
-	if "https://open.spotify.com/" in playlist:
-		
-		#modTimesinceEpoc = os.path.getmtime("/Users/alejandrosanzperez/Desktop/Uni/Bot/pruebaSpoti/testfile.txt")
-		#modificationTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(modTimesinceEpoc))
- #
-		#añoMod = modificationTime[0:modificationTime.find("-")]
-		#newMT = modificationTime[modificationTime.find("-")+1:len(modificationTime)]
-		#mesMod = newMT[0:newMT.find("-")]
-		#newMT = newMT[newMT.find("-")+1:len(newMT)]
-		#diaMod = newMT[0:newMT.find(" ")]  
-#
-		#now = datetime.datetime.now()
-		#currentyear = (str)(now.year)
-		#currentmonth = (str)(now.month)
-		#currentday = (str)(now.day)
-#
-		#if(currentday != diaMod | currentmonth != mesMod | currentyear != añoMod):
-		#	file = open("testfile.txt","w") 
-		#	file.write("0")
-		#	file.close()
+    cid = s.chat.id
+    playlist = s.text.split('/spotify', 1)[1].strip()
+    if "https://open.spotify.com/" in playlist:
 
-		#file = open("testfile.txt","r") 
-		#numero = file.read()
-		numero = 50
-		if numero <= 110:
-			Dev_key="AIzaSyCq3lYFjVH_-pNpMvOx6t5u0YvZKWdUyvU"
-			tracks = []
-			tracks = canciones.tracks(playlist, Dev_Key)
-			for k in tracks:
-				size = os.stat(k).st_size
-				size = int(size/1000000)
-				if(size<20):
-					audio = open(k, "rb")
-					print(k)
-					bot.send_audio(cid, audio)
-				remove(k)
-		if numero > 110 & numero <= 220:
-			Dev_key="AIzaSyCwtFyURinXYSXUuMw9yEA02_yKPI_aTWA"
-			tracks = []
-			tracks = canciones.tracks(playlist, Dev_Key)
-			for k in tracks:
-				size = os.stat(k).st_size
-				size = int(size/1000000)
-				if(size<20):
-					audio = open(k, "rb")
-					print(k)
-					bot.send_audio(cid, audio)
-				remove(k)
+        # modTimesinceEpoc = os.path.getmtime("/Users/alejandrosanzperez/Desktop/Uni/Bot/pruebaSpoti/testfile.txt")
+        # modificationTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(modTimesinceEpoc))
+     #
+        # añoMod = modificationTime[0:modificationTime.find("-")]
+        # newMT = modificationTime[modificationTime.find("-")+1:len(modificationTime)]
+        # mesMod = newMT[0:newMT.find("-")]
+        # newMT = newMT[newMT.find("-")+1:len(newMT)]
+        # diaMod = newMT[0:newMT.find(" ")]
+        #
+        # now = datetime.datetime.now()
+        # currentyear = (str)(now.year)
+        # currentmonth = (str)(now.month)
+        # currentday = (str)(now.day)
+        #
+        # if(currentday != diaMod | currentmonth != mesMod | currentyear != añoMod):
+        #	file = open("testfile.txt","w")
+        #	file.write("0")
+        #	file.close()
 
-		else:
-			bot.send_message(cid, "La cuota diaria ha sido excedida, por favor espere hasta mañana para poder descargar más música")
-	else:
-		bot.send_message(cid, " Playlist introducida incorrecta ")
+        # file = open("testfile.txt","r")
+        # numero = file.read()
+		length, songs = canciones.numero_canciones(playlist)
+        numero = 50
+        if numero <= 110:
+            Dev_key = "AIzaSyCq3lYFjVH_-pNpMvOx6t5u0YvZKWdUyvU"
+            tracks = []
+            tracks = canciones.tracks(playlist, Dev_key)
+            canciones.envio_borrado(tracks)
+        if numero > 110 & numero <= 220:
+            Dev_key = "AIzaSyCwtFyURinXYSXUuMw9yEA02_yKPI_aTWA"
+            tracks = []
+            tracks = canciones.tracks(playlist, Dev_key)
+            canciones.envio_borrado(tracks)
+        if numero > 220 & numero <= 330:
+            Dev_key = "AIzaSyBISJc9S-Ee1YHGwHwVxZE9j8Py5Dymv4c"
+            tracks = []
+            tracks = canciones.tracks(playlist, Dev_key)
+            canciones.envio_borrado(tracks)
+        else:
+            bot.send_message(
+                cid, "La cuota diaria ha sido excedida, por favor espere hasta mañana para poder descargar más música")
+    else:
+        bot.send_message(cid, " Playlist introducida incorrecta ")
 
 
 bot.polling()
