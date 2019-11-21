@@ -156,47 +156,55 @@ def command_spotify(s):
     playlist = s.text.split('/spotify', 1)[1].strip()
     if "https://open.spotify.com/" in playlist:
 
-        # modTimesinceEpoc = os.path.getmtime("/Users/alejandrosanzperez/Desktop/Uni/Bot/pruebaSpoti/testfile.txt")
-        # modificationTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(modTimesinceEpoc))
-     #
-        # añoMod = modificationTime[0:modificationTime.find("-")]
-        # newMT = modificationTime[modificationTime.find("-")+1:len(modificationTime)]
-        # mesMod = newMT[0:newMT.find("-")]
-        # newMT = newMT[newMT.find("-")+1:len(newMT)]
-        # diaMod = newMT[0:newMT.find(" ")]
-        #
-        # now = datetime.datetime.now()
-        # currentyear = (str)(now.year)
-        # currentmonth = (str)(now.month)
-        # currentday = (str)(now.day)
-        #
-        # if(currentday != diaMod | currentmonth != mesMod | currentyear != añoMod):
-        #	file = open("testfile.txt","w")
-        #	file.write("0")
-        #	file.close()
+        modTimesinceEpoc = os.path.getmtime(
+            "/Users/alejandrosanzperez/Desktop/Uni/Bot/pruebaSpoti/testfile.txt")
+        modificationTime = time.strftime(
+            '%Y-%m-%d %H:%M:%S', time.localtime(modTimesinceEpoc))
 
-        # file = open("testfile.txt","r")
-        # numero = file.read()
-		length, songs = canciones.numero_canciones(playlist)
-        numero = 50
-        if numero <= 110:
-            Dev_key = "AIzaSyCq3lYFjVH_-pNpMvOx6t5u0YvZKWdUyvU"
-            tracks = []
-            tracks = canciones.tracks(playlist, Dev_key)
-            canciones.envio_borrado(tracks)
-        if numero > 110 & numero <= 220:
-            Dev_key = "AIzaSyCwtFyURinXYSXUuMw9yEA02_yKPI_aTWA"
-            tracks = []
-            tracks = canciones.tracks(playlist, Dev_key)
-            canciones.envio_borrado(tracks)
-        if numero > 220 & numero <= 330:
-            Dev_key = "AIzaSyBISJc9S-Ee1YHGwHwVxZE9j8Py5Dymv4c"
-            tracks = []
-            tracks = canciones.tracks(playlist, Dev_key)
-            canciones.envio_borrado(tracks)
+        añoMod = modificationTime[0:modificationTime.find("-")]
+        newMT = modificationTime[modificationTime.find(
+            "-")+1:len(modificationTime)]
+        mesMod = newMT[0:newMT.find("-")]
+        newMT = newMT[newMT.find("-")+1:len(newMT)]
+        diaMod = newMT[0:newMT.find(" ")]
+
+        now = datetime.datetime.now()
+        currentyear = (str)(now.year)
+        currentmonth = (str)(now.month)
+        currentday = (str)(now.day)
+
+        if(currentday != diaMod | currentmonth != mesMod | currentyear != añoMod):
+            file = open("testfile.txt", "w")
+            file.write("0")
+            file.close()
+            file = open("testfile.txt", "r")
+        numero = file.read()
+        if(numero<330):    
+            length, songs = canciones.numero_canciones(playlist)
+            res = canciones.limites(numero, length)
+            subsongs1 = []
+            subsongs2 = []
+            if(length < 110):
+                if(res is not 'null'):
+                    subsongs1 = songs[0:res]
+                    subsongs2 = songs[res:len(songs)]
+                    tracks = canciones.api_key(subsongs1, subsongs2, numero)
+                else:
+                    tracks = canciones.api_key(songs, subsongs2, numero)
+                for k in tracks:
+                    size = os.stat(k).st_size
+                    size = int(size/1000000)
+                    if(size < 20):
+                        audio = open(k, "rb")
+                        print(k)
+                        bot.send_audio(cid, audio)
+                    remove(k)
+            else:
+                bot.send_message(
+                    cid, "La playlist es demasiada larga")
         else:
             bot.send_message(
-                cid, "La cuota diaria ha sido excedida, por favor espere hasta mañana para poder descargar más música")
+                    cid, "La cuota de bajar canciones ha sido excedida por hoy, intentalo mañana")
     else:
         bot.send_message(cid, " Playlist introducida incorrecta ")
 
