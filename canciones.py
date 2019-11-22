@@ -177,8 +177,8 @@ def numero_canciones(playlist):
 
 def limites(numero, length):
     res = 'null'
+    suma = numero+length
     if(numero < 110):
-        suma = numero+length
         if(suma > 110):
             res = 110-numero  # longitud del primer tramo del array
     if(numero > 110 & numero <= 220):
@@ -195,26 +195,24 @@ def api_key(subsongs1, subsongs2, numero):
     tracks = []
     if numero <= 110:
         Dev_key = "AIzaSyCq3lYFjVH_-pNpMvOx6t5u0YvZKWdUyvU"
-        tracks.append(function_tracks(subsongs1, Dev_key))
+        tracks.extend(function_tracks(subsongs1, Dev_key))
         numero = numero + len(subsongs1)
         cont = cont + 1
     if numero > 110 & numero <= 220:
         Dev_key = "AIzaSyCwtFyURinXYSXUuMw9yEA02_yKPI_aTWA"
         if(cont == 1):
-            tracks.append(function_tracks(subsongs1, Dev_key))
+            tracks.extend(function_tracks(subsongs1, Dev_key))
             cont = cont + 1
         else:
-            tracks.append(function_tracks(subsongs2, Dev_key))
+            tracks.extend(function_tracks(subsongs2, Dev_key))
     if numero > 220 & numero <= 330:
         Dev_key = "AIzaSyBISJc9S-Ee1YHGwHwVxZE9j8Py5Dymv4c"
         if(cont == 1):
-            tracks.append(function_tracks(subsongs1, Dev_key))
+            tracks.extend(function_tracks(subsongs1, Dev_key))
             cont = cont + 1
         else:
-            tracks.append(function_tracks(subsongs2, Dev_key))
-	return tracks
+            tracks.extend(function_tracks(subsongs2, Dev_key))
+    return tracks
+	
 
 		
-
-
-# tracks("https://open.spotify.com/playlist/1RiYN89CUBVdY93cVqW9r7?si=9151ixNwQtu8PfZobsSguw","AIzaSyCwtFyURinXYSXUuMw9yEA02_yKPI_aTWA")

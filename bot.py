@@ -156,29 +156,30 @@ def command_spotify(s):
     playlist = s.text.split('/spotify', 1)[1].strip()
     if "https://open.spotify.com/" in playlist:
 
-        modTimesinceEpoc = os.path.getmtime(
-            "/Users/alejandrosanzperez/Desktop/Uni/Bot/pruebaSpoti/testfile.txt")
-        modificationTime = time.strftime(
-            '%Y-%m-%d %H:%M:%S', time.localtime(modTimesinceEpoc))
+       # modTimesinceEpoc = os.path.getmtime(
+       #     "/Users/alejandrosanzperez/Desktop/botpy/testfile.txt")
+        #modificationTime = time.strftime(
+         #   '%Y-%m-%d %H:%M:%S', time.localtime(modTimesinceEpoc))
 
-        añoMod = modificationTime[0:modificationTime.find("-")]
-        newMT = modificationTime[modificationTime.find(
-            "-")+1:len(modificationTime)]
-        mesMod = newMT[0:newMT.find("-")]
-        newMT = newMT[newMT.find("-")+1:len(newMT)]
-        diaMod = newMT[0:newMT.find(" ")]
+        #añoMod = modificationTime[0:modificationTime.find("-")]
+        #newMT = modificationTime[modificationTime.find(
+         #   "-")+1:len(modificationTime)]
+        #mesMod = newMT[0:newMT.find("-")]
+        #newMT = newMT[newMT.find("-")+1:len(newMT)]
+        #diaMod = newMT[0:newMT.find(" ")]
 
-        now = datetime.datetime.now()
-        currentyear = (str)(now.year)
-        currentmonth = (str)(now.month)
-        currentday = (str)(now.day)
+        #now = datetime.datetime.now()
+        #currentyear = (str)(now.year)
+        #currentmonth = (str)(now.month)
+        #currentday = (str)(now.day)
 
-        if(currentday != diaMod | currentmonth != mesMod | currentyear != añoMod):
-            file = open("testfile.txt", "w")
-            file.write("0")
-            file.close()
-            file = open("testfile.txt", "r")
-        numero = file.read()
+        #if(currentday != diaMod | currentmonth != mesMod | currentyear != añoMod):
+        #    file = open("testfile.txt", "w")
+        #    file.write("0")
+         #   file.close()
+         #   file = open("testfile.txt", "r")
+        #numero = file.read()
+        numero=150
         if(numero<330):    
             length, songs = canciones.numero_canciones(playlist)
             res = canciones.limites(numero, length)
@@ -191,8 +192,9 @@ def command_spotify(s):
                     tracks = canciones.api_key(subsongs1, subsongs2, numero)
                 else:
                     tracks = canciones.api_key(songs, subsongs2, numero)
-                for k in tracks:
-                    size = os.stat(k).st_size
+                tracks = tracks[0:int(len(tracks)/2)]
+                for k in tracks:        #problema con tracks, el array contiene el doble 
+                    size = os.stat(k).st_size 
                     size = int(size/1000000)
                     if(size < 20):
                         audio = open(k, "rb")
