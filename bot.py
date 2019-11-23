@@ -170,7 +170,7 @@ def command_spotify(s):
         currentmonth = (now.month)
         currentday = (now.day)
 
-        if(currentday == diaMod | currentmonth == mesMod | currentyear == añoMod):
+        if(currentday != diaMod | currentmonth != mesMod | currentyear != añoMod):
             file = open("testfile.txt", "w")
             file.write("0")
             file.close()
