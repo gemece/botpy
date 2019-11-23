@@ -156,6 +156,7 @@ def command_spotify(s):
     playlist = s.text.split('/spotify', 1)[1].strip()
     if "https://open.spotify.com/" in playlist:
         bot.send_message(cid, "El proceso de descarga va a comenzar, este proceso puede durar unos minutos.")
+        
         modTimesinceEpoc = os.path.getmtime("/Users/alejandrosanzperez/Desktop/botpy/testfile.txt")
         modificationTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(modTimesinceEpoc))
 
@@ -170,12 +171,12 @@ def command_spotify(s):
         currentmonth = (now.month)
         currentday = (now.day)
 
-        if(currentday != diaMod | currentmonth != mesMod | currentyear != añoMod):
+        if(currentday == diaMod | currentmonth == mesMod | currentyear == añoMod):
             file = open("testfile.txt", "w")
             file.write("0")
             file.close()
         file = open("testfile.txt", "r")
-        numero = file.read()
+        numero = (int)(file.read())
         
         if(numero<330):    
             length, songs = canciones.numero_canciones(playlist)
