@@ -64,6 +64,7 @@ def function_tracks(songs, DevKey):
     tracks = []
     for fi in os.listdir("mp3"):
         tracks.append(path + "/" + os.path.basename(fi))
+
     return tracks
 
 
@@ -178,14 +179,16 @@ def numero_canciones(playlist):
 def limites(numero, length):
     res = 'null'
     suma = numero+length
+    
     if(numero < 110):
         if(suma > 110):
-            res = 110-numero  # longitud del primer tramo del array
+            res = 110-numero 
+            
     if(numero > 110 & numero <= 220):
-        if(suma > 110):
+        if(suma > 220):
             res = 220-numero
     if(numero > 220 & numero <= 330):
-        if(suma > 220):
+        if(suma > 330):
             res = 330-numero
     return res
 
@@ -204,14 +207,14 @@ def api_key(subsongs1, subsongs2, numero):
             tracks.extend(function_tracks(subsongs1, Dev_key))
             cont = cont + 1
         else:
-            tracks.extend(function_tracks(subsongs2, Dev_key))
+            tracks=function_tracks(subsongs2, Dev_key)
     if numero > 220 & numero <= 330:
         Dev_key = "AIzaSyBISJc9S-Ee1YHGwHwVxZE9j8Py5Dymv4c"
         if(cont == 1):
             tracks.extend(function_tracks(subsongs1, Dev_key))
             cont = cont + 1
         else:
-            tracks.extend(function_tracks(subsongs2, Dev_key))
+            tracks=function_tracks(subsongs2, Dev_key)
     return tracks
 	
 
