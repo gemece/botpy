@@ -171,10 +171,12 @@ def command_spotify(s):
         currentmonth = (now.month)
         currentday = (now.day)
 
-        if(currentday == diaMod | currentmonth == mesMod | currentyear == añoMod):
-            file = open("testfile.txt", "w")
-            file.write("0")
-            file.close()
+        if(currentday != diaMod):
+            if(currentmonth != mesMod):
+                if(currentyear != añoMod):
+                    file = open("testfile.txt", "w")
+                    file.write("0")
+                    file.close()
         file = open("testfile.txt", "r")
         numero = (int)(file.read())
         
