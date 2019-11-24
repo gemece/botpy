@@ -180,12 +180,12 @@ def command_spotify(s):
         file = open("testfile.txt", "r")
         numero = (int)(file.read())
         
-        if(numero<330):    
+        if(numero<300):    
             length, songs = canciones.numero_canciones(playlist)
             res = canciones.limites(numero, length)
             subsongs1 = []
             subsongs2 = []
-            if(length < 110):
+            if(length < 100):
                 if(res is not 'null'):
                     subsongs1 = songs[0:res]
                     subsongs2 = songs[res:len(songs)]

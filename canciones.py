@@ -180,35 +180,35 @@ def limites(numero, length):
     res = 'null'
     suma = numero+length
     
-    if(numero < 110):
-        if(suma > 110):
-            res = 110-numero 
+    if(numero < 100):
+        if(suma > 100):
+            res = 100-numero 
             
-    if(numero > 110 & numero <= 220):
-        if(suma > 220):
-            res = 220-numero
-    if(numero > 220 & numero <= 330):
-        if(suma > 330):
-            res = 330-numero
+    if(numero > 100 & numero <= 200):
+        if(suma > 200):
+            res = 200-numero
+    if(numero > 200 & numero <= 300):
+        if(suma > 300):
+            res = 300-numero
     return res
 
 
 def api_key(subsongs1, subsongs2, numero):
     cont = 1
     tracks = []
-    if numero <= 110:
+    if numero <= 100:
         Dev_key = "AIzaSyCq3lYFjVH_-pNpMvOx6t5u0YvZKWdUyvU"
         tracks.extend(function_tracks(subsongs1, Dev_key))
         numero = numero + len(subsongs1)
         cont = cont + 1
-    if numero > 110 & numero <= 220:
+    if numero > 100 & numero <= 200:
         Dev_key = "AIzaSyCwtFyURinXYSXUuMw9yEA02_yKPI_aTWA"
         if(cont == 1):
             tracks.extend(function_tracks(subsongs1, Dev_key))
             cont = cont + 1
         else:
             tracks=function_tracks(subsongs2, Dev_key)
-    if numero > 220 & numero <= 330:
+    if numero > 200 & numero <= 300:
         Dev_key = "AIzaSyBISJc9S-Ee1YHGwHwVxZE9j8Py5Dymv4c"
         if(cont == 1):
             tracks.extend(function_tracks(subsongs1, Dev_key))
