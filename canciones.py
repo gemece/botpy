@@ -136,7 +136,7 @@ def api_youtube_search(options, DevKey):
 
 
 def cache(cancion):
-    directorio = '/Users/alejandrosanzperez/Desktop/Uni/Bot/pruebaSpoti/Eve'
+    directorio = './cache'
     cancion = cancion.lower()
     cancion = cancion.strip()
     for root, dir, ficheros in os.walk(directorio):
@@ -145,7 +145,7 @@ def cache(cancion):
             if(cancion in fichero.lower()):
                 rutai = root+"/"+fichero
                 shutil.copy(
-                    rutai, '/Users/alejandrosanzperez/Desktop/Uni/Bot/pruebaSpoti/mp3')
+                    rutai, './mp3')
                 return 1
 
     return 0
@@ -165,12 +165,12 @@ def numero_canciones(playlist):
     songs = []
     for cancion in cosas['tracks']['items']:
         s = cancion['track']['name']
-        # encontrada = cache(s)
-        # if encontrada is 0:
-        autores = ''
-        for autor in cancion['track']['artists']:
-            autores = autores + ' {}'.format(autor['name'])
-        songs.append('{} {}'.format(autores, s))
+        encontrada = cache(s)
+        if encontrada is 0:
+            autores = ''
+            for autor in cancion['track']['artists']:
+                autores = autores + ' {}'.format(autor['name'])
+            songs.append('{} {}'.format(autores, s))
     length = len(songs)
 
     return length, songs

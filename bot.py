@@ -157,7 +157,7 @@ def command_spotify(s):
     if "https://open.spotify.com/" in playlist:
         bot.send_message(cid, "El proceso de descarga va a comenzar, este proceso puede durar unos minutos.")
         
-        modTimesinceEpoc = os.path.getmtime("/Users/alejandrosanzperez/Desktop/botpy/testfile.txt")
+        modTimesinceEpoc = os.path.getmtime("./testfile.txt")
         modificationTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(modTimesinceEpoc))
 
         añoMod = int(modificationTime[0:modificationTime.find("-")])
